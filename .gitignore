@@ -4,6 +4,10 @@ config.local.json
 data/
 cache/
 outputs/
+downloads/
+report_en.html
+Portfolio_Report_EN_*.html
+Portfolio_Report_EN_*.zip
 *.log
 .env
 .env.*

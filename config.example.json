@@ -28,9 +28,9 @@
         "NGM",
         "NasdaqGS"
       ],
-      "asset_class": "股票",
-      "region": "未知：需经济敞口资料",
-      "sector": "未知：待来源核实"
+      "asset_class": "Equity",
+      "region": "Unknown: economic exposure data needed",
+      "sector": "Unknown: source verification needed"
     },
     "CRDO": {
       "ticker": "CRDO",
@@ -41,9 +41,9 @@
         "NGM",
         "NasdaqGS"
       ],
-      "asset_class": "股票",
-      "region": "未知：需经济敞口资料",
-      "sector": "未知：待来源核实"
+      "asset_class": "Equity",
+      "region": "Unknown: economic exposure data needed",
+      "sector": "Unknown: source verification needed"
     },
     "GLD": {
       "ticker": "GLD",
@@ -53,9 +53,9 @@
         "PCX",
         "NYSEArca"
       ],
-      "asset_class": "黄金基金",
-      "region": "不适用：黄金",
-      "sector": "不适用：黄金"
+      "asset_class": "Gold fund",
+      "region": "Not applicable: gold",
+      "sector": "Not applicable: gold"
     },
     "SGOV": {
       "ticker": "SGOV",
@@ -65,9 +65,9 @@
         "NYQ",
         "NYSE"
       ],
-      "asset_class": "短期国债ETF",
-      "region": "美国国债（名称识别，未穿透）",
-      "sector": "政府债券（名称识别）"
+      "asset_class": "Short-term Treasury ETF",
+      "region": "US Treasury (name-based category; not looked through)",
+      "sector": "Government bonds (name-based category)"
     },
     "SPY": {
       "ticker": "SPY",
@@ -77,9 +77,9 @@
         "PCX",
         "NYSEArca"
       ],
-      "asset_class": "股票ETF",
-      "region": "美国股票（名称识别，未穿透）",
-      "sector": "未知：未穿透"
+      "asset_class": "Equity ETF",
+      "region": "US equity (name-based category; not looked through)",
+      "sector": "Unknown: not looked through"
     },
     "ZCN": {
       "ticker": "ZCN.TO",
@@ -89,9 +89,9 @@
         "TOR",
         "Toronto"
       ],
-      "asset_class": "股票ETF",
-      "region": "加拿大股票（名称识别，未穿透）",
-      "sector": "未知：未穿透"
+      "asset_class": "Equity ETF",
+      "region": "Canadian equity (name-based category; not looked through)",
+      "sector": "Unknown: not looked through"
     },
     "XBB": {
       "ticker": "XBB.TO",
@@ -101,9 +101,9 @@
         "TOR",
         "Toronto"
       ],
-      "asset_class": "债券ETF",
-      "region": "加拿大债券（名称识别，未穿透）",
-      "sector": "未知：未穿透"
+      "asset_class": "Bond ETF",
+      "region": "Canadian bonds (name-based category; not looked through)",
+      "sector": "Unknown: not looked through"
     },
     "XEF": {
       "ticker": "XEF.TO",
@@ -113,9 +113,9 @@
         "TOR",
         "Toronto"
       ],
-      "asset_class": "股票ETF",
-      "region": "发达市场EAFE（名称识别，未穿透）",
-      "sector": "未知：未穿透"
+      "asset_class": "Equity ETF",
+      "region": "Developed EAFE markets (name-based category; not looked through)",
+      "sector": "Unknown: not looked through"
     },
     "VEE": {
       "ticker": "VEE.TO",
@@ -125,9 +125,9 @@
         "TOR",
         "Toronto"
       ],
-      "asset_class": "股票ETF",
-      "region": "新兴市场（名称识别，未穿透）",
-      "sector": "未知：未穿透"
+      "asset_class": "Equity ETF",
+      "region": "Emerging markets (name-based category; not looked through)",
+      "sector": "Unknown: not looked through"
     }
   },
   "initial_capital_CAD": 1000000,

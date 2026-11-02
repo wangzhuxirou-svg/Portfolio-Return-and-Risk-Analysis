@@ -8,16 +8,18 @@ sys.path.insert(0,str(Path(__file__).resolve().parents[1]))
 import main as a
 import enrichment as e
 
-def test_cli_runs_offline_with_synthetic_inputs(tmp_path):
+@pytest.mark.parametrize('asof,final_nav',[('2026-11-01',1000),('2026-11-02',1010)])
+def test_cli_runs_offline_with_synthetic_inputs(tmp_path,asof,final_nav):
     """A clean clone must produce an honest partial report without private caches."""
     import subprocess
     raw=tmp_path/'raw'; raw.mkdir()
     pd.DataFrame([dict(Symbol='ZCN',Quantity=10,Currency='CAD',LastPrice=21,PricePaid=20,MarketValue=210)]).to_csv(raw/'positions.csv',index=False)
     pd.DataFrame([dict(Symbol='ZCN',TransactionType='Market - Buy',Exchange='T',Quantity=10,Currency='CAD',Price='C$20',Amount='-C$200',CreateDate='10/22/2026 - 12:00')]).to_csv(raw/'transactions.csv',index=False)
-    pd.DataFrame([{'Date':'10/8/2026 12:00:00 AM','Value':1000},{'Date':'11/1/2026 12:00:00 AM','Value':1000}]).to_csv(raw/'nav.csv',index=False)
-    (raw/'summary.csv').write_text('Date:,11/1/2026\nCash Balance:,C$790,Market Value of Long Positions:,C$210,Portfolio Value:,C$1000\nLoan Balance:,C$0,Market Value of Short Positions:,C$0\nInterest Earn Rate:,C$0\n',encoding='utf-8')
+    display=pd.Timestamp(asof).strftime('%m/%d/%Y')
+    pd.DataFrame([{'Date':'10/8/2026 12:00:00 AM','Value':1000},{'Date':display+' 12:00:00 AM','Value':final_nav}]).to_csv(raw/'nav.csv',index=False)
+    (raw/'summary.csv').write_text(f'Date:,{display}\nCash Balance:,C${final_nav-210},Market Value of Long Positions:,C$210,Portfolio Value:,C${final_nav}\nLoan Balance:,C$0,Market Value of Short Positions:,C$0\nInterest Earn Rate:,C$0\n',encoding='utf-8')
     cfg=json.loads((a.ROOT/'config.example.json').read_text(encoding='utf-8'))
-    cfg.update(input_dir=str(raw),clean_dir=str(tmp_path/'clean'),cache_dir=str(tmp_path/'cache'),output_dir=str(tmp_path/'reports'),external_flows='none',initial_capital_CAD=1000)
+    cfg.update(input_dir=str(raw),clean_dir=str(tmp_path/'clean'),cache_dir=str(tmp_path/'cache'),output_dir=str(tmp_path/'reports'),external_flows='none',initial_capital_CAD=1000,positions_asof=asof)
     cfg['assets']={'ZCN':cfg['assets']['ZCN']}
     config=tmp_path/'config.json'; config.write_text(json.dumps(cfg),encoding='utf-8')
     result=subprocess.run([sys.executable,str(a.ROOT/'main.py'),'--config',str(config),'--offline'],capture_output=True,text=True)
@@ -25,8 +27,35 @@ def test_cli_runs_offline_with_synthetic_inputs(tmp_path):
     latest=Path((tmp_path/'reports/LATEST.txt').read_text(encoding='utf-8'))
     assert (latest/'report.html').exists()
     actual=json.loads((latest/'actual_summary.json').read_text(encoding='utf-8'))
-    assert actual['cumulative_change']==0
+    assert actual['cumulative_change']==pytest.approx(final_nav/1000-1)
     assert 'flows_unknown' not in (latest/'validation.csv').read_text(encoding='utf-8-sig')
+    from bs4 import BeautifulSoup
+    import re
+    import zipfile
+    soup=BeautifulSoup((latest/'report_en.html').read_text(encoding='utf-8'),'html.parser')
+    assert soup.html['lang']=='en'
+    assert not re.search(r'[\u4e00-\u9fff]',soup.get_text())
+    assert asof in soup.get_text()
+    assert f'{final_nav/1000-1:.3%}' in soup.get_text()
+    assert 'Data unavailable' in result.stdout or 'Missing CAD history' in soup.get_text()
+    assert len(soup.find_all('img'))==7
+    assert all(tag['src'].startswith('data:image/png;base64,') for tag in soup.find_all('img'))
+    bundle=latest/f'Portfolio_Report_EN_{asof}.zip'
+    with zipfile.ZipFile(bundle) as z:
+        assert z.testzip() is None
+        assert f'Portfolio_Report_EN_{asof}.html' in z.namelist()
+        assert 'supporting_data/actual_summary.json' in z.namelist()
+
+def test_export_can_be_repeated_without_calculating_or_fetching(tmp_path):
+    from export_report import export_run
+    run=tmp_path/'run'; run.mkdir()
+    (run/'run_config.json').write_text(json.dumps({'positions_asof':'2027-02-03'}),encoding='utf-8')
+    (run/'report.html').write_text('<html lang="en"><body><h1>2027-02-03</h1><table><tr><td>123.45</td></tr></table></body></html>',encoding='utf-8')
+    report,bundle=export_run(run,tmp_path/'download')
+    assert report.name=='Portfolio_Report_EN_2027-02-03.html'
+    assert '123.45' in report.read_text(encoding='utf-8')
+    again,_=export_run(run,tmp_path/'download')
+    assert again.read_bytes()==report.read_bytes()
 
 def test_currency_parser_preserves_sign():
     assert a.money('-C$1,234.50')==-1234.5
@@ -89,7 +118,7 @@ def test_no_external_flows_actual_return():
     nav=pd.Series([1000,1001,990],index=pd.date_range('2026-10-08',periods=3))
     r,label=a.nav_returns(nav,pd.DataFrame(),'none')
     assert (1+r.dropna()).prod()-1==pytest.approx(-.01)
-    assert '已确认无外部出入金' in label
+    assert 'no external flows confirmed' in label
 
 def test_benchmark_is_buy_and_hold_and_same_dates(tmp_path):
     from types import SimpleNamespace
