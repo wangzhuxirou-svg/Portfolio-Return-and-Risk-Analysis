@@ -1,0 +1,176 @@
+{
+  "input_dir": "data/raw",
+  "clean_dir": "data/clean",
+  "cache_dir": "cache",
+  "output_dir": "outputs",
+  "positions_asof": "2026-11-01",
+  "timezone": "America/Toronto",
+  "history_years": 3,
+  "external_flows": "unknown",
+  "flows_file": "data/external_flows.csv",
+  "ledger_file": "data/ledger.csv",
+  "holdings_file": "data/etf_holdings.csv",
+  "settlements_file": "data/settlements.csv",
+  "official_benchmark": "RPMC Benchmark",
+  "comparison_benchmark": "SPY",
+  "transaction_types": {
+    "Market - Buy": "buy",
+    "Market - Sell": "sell",
+    "Dividends": "dividend"
+  },
+  "assets": {
+    "CSCO": {
+      "ticker": "CSCO",
+      "currency": "USD",
+      "stocktrak_exchange": "US",
+      "yahoo_exchanges": [
+        "NMS",
+        "NGM",
+        "NasdaqGS"
+      ],
+      "asset_class": "股票",
+      "region": "未知：需经济敞口资料",
+      "sector": "未知：待来源核实"
+    },
+    "CRDO": {
+      "ticker": "CRDO",
+      "currency": "USD",
+      "stocktrak_exchange": "US",
+      "yahoo_exchanges": [
+        "NMS",
+        "NGM",
+        "NasdaqGS"
+      ],
+      "asset_class": "股票",
+      "region": "未知：需经济敞口资料",
+      "sector": "未知：待来源核实"
+    },
+    "GLD": {
+      "ticker": "GLD",
+      "currency": "USD",
+      "stocktrak_exchange": "US",
+      "yahoo_exchanges": [
+        "PCX",
+        "NYSEArca"
+      ],
+      "asset_class": "黄金基金",
+      "region": "不适用：黄金",
+      "sector": "不适用：黄金"
+    },
+    "SGOV": {
+      "ticker": "SGOV",
+      "currency": "USD",
+      "stocktrak_exchange": "US",
+      "yahoo_exchanges": [
+        "NYQ",
+        "NYSE"
+      ],
+      "asset_class": "短期国债ETF",
+      "region": "美国国债（名称识别，未穿透）",
+      "sector": "政府债券（名称识别）"
+    },
+    "SPY": {
+      "ticker": "SPY",
+      "currency": "USD",
+      "stocktrak_exchange": "US",
+      "yahoo_exchanges": [
+        "PCX",
+        "NYSEArca"
+      ],
+      "asset_class": "股票ETF",
+      "region": "美国股票（名称识别，未穿透）",
+      "sector": "未知：未穿透"
+    },
+    "ZCN": {
+      "ticker": "ZCN.TO",
+      "currency": "CAD",
+      "stocktrak_exchange": "T",
+      "yahoo_exchanges": [
+        "TOR",
+        "Toronto"
+      ],
+      "asset_class": "股票ETF",
+      "region": "加拿大股票（名称识别，未穿透）",
+      "sector": "未知：未穿透"
+    },
+    "XBB": {
+      "ticker": "XBB.TO",
+      "currency": "CAD",
+      "stocktrak_exchange": "T",
+      "yahoo_exchanges": [
+        "TOR",
+        "Toronto"
+      ],
+      "asset_class": "债券ETF",
+      "region": "加拿大债券（名称识别，未穿透）",
+      "sector": "未知：未穿透"
+    },
+    "XEF": {
+      "ticker": "XEF.TO",
+      "currency": "CAD",
+      "stocktrak_exchange": "T",
+      "yahoo_exchanges": [
+        "TOR",
+        "Toronto"
+      ],
+      "asset_class": "股票ETF",
+      "region": "发达市场EAFE（名称识别，未穿透）",
+      "sector": "未知：未穿透"
+    },
+    "VEE": {
+      "ticker": "VEE.TO",
+      "currency": "CAD",
+      "stocktrak_exchange": "T",
+      "yahoo_exchanges": [
+        "TOR",
+        "Toronto"
+      ],
+      "asset_class": "股票ETF",
+      "region": "新兴市场（名称识别，未穿透）",
+      "sector": "未知：未穿透"
+    }
+  },
+  "initial_capital_CAD": 1000000,
+  "benchmark": {
+    "inception": "2026-10-09",
+    "weights": {
+      "SPY": 0.35,
+      "XIC": 0.15,
+      "IEMG": 0.2,
+      "XBB": 0.2,
+      "GLD": 0.1
+    },
+    "nav_file": "data/official_benchmark_nav.csv",
+    "source": "https://www.rotman.utoronto.ca/faculty-and-research/education-labs/bmo-financial-group-finance-research-and-trading-lab/finance-research-and-trading-lab/events/rpmc/",
+    "construction": "buy_and_hold_fund_total_return",
+    "reinvestment_assumption": "each_fund",
+    "additional_trading_cost_assumption": 0
+  },
+  "benchmark_assets": {
+    "XIC": {
+      "ticker": "XIC.TO",
+      "currency": "CAD",
+      "yahoo_exchanges": [
+        "TOR",
+        "Toronto"
+      ]
+    },
+    "IEMG": {
+      "ticker": "IEMG",
+      "currency": "USD",
+      "yahoo_exchanges": [
+        "PCX",
+        "NYSEArca"
+      ],
+      "competition_ticker": "IEMG.K",
+      "mapping_source": "https://www.ishares.com/us/products/244050/ishares-msci-emerging-markets-etf"
+    }
+  },
+  "accounting_evidence": {
+    "transactions_sha256": "",
+    "commission_total_CAD": 0,
+    "commission_per_trade_CAD_supported": 0,
+    "source": "No settlement evidence configured. Supply verified evidence for your own input file.",
+    "scope": "Only the exact transaction-file SHA256 supplied here."
+  }
+}
